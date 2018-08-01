@@ -16,5 +16,9 @@ module Triple
       end
     end
 
+    def connection_options
+      { adapter: Triple.adapter, database: database }
+    end
+
   end
 end

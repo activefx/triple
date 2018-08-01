@@ -34,4 +34,18 @@ RSpec.describe Triple::DB do
 
   end
 
+  context "#connection_options" do
+
+    it "provides the :adapter key" do
+      instance = described_class.new
+      expect(instance.connection_options[:adapter]).to eq Triple.adapter
+    end
+
+    it "provides the :database key" do 
+      instance = described_class.new
+      expect(instance.connection_options[:database]).to eq ':memory:'
+    end
+
+  end
+
 end
