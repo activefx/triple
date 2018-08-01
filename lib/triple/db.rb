@@ -20,5 +20,13 @@ module Triple
       { adapter: Triple.adapter, database: database }
     end
 
+    def with_connection
+      original = ActiveRecord::Base.remove_connection
+      ActiveRecord::Base.establish_connection(connection_options)
+      yield
+    ensure
+      ActiveRecord::Base.establish_connection(original) if original
+    end
+
   end
 end
