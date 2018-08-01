@@ -3,6 +3,7 @@ require 'triple/version'
 require 'sqlite3'
 require 'active_record'
 
+require 'triple/schema'
 require 'triple/db'
 
 module Triple
@@ -10,7 +11,7 @@ module Triple
   @adapter = 'sqlite3'.freeze
 
   @default_database = ':memory:'
-  
+
   def self.adapter
     @adapter
   end
