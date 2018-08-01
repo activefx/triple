@@ -4,6 +4,21 @@ RSpec.describe Triple::DB do
 
   let(:instance) { described_class.new }
 
+  before(:all) do
+    ActiveRecord::Schema.verbose = false
+    ActiveRecord::Base.remove_connection
+    File.delete(data('working.db')) if File.exist?(data('working.db'))
+  end
+
+  after(:each) do
+    ActiveRecord::Base.remove_connection
+    File.delete(data('working.db')) if File.exist?(data('working.db'))
+  end
+
+  after(:all) do
+    ActiveRecord::Schema.verbose = true
+  end
+
   specify { expect{ described_class.new }.not_to raise_error }
 
   context ".new" do
@@ -14,6 +29,23 @@ RSpec.describe Triple::DB do
 
     it "does not have a namespace by default" do
       expect(instance.namespace).to be_nil
+    end
+
+  end
+
+  context "#version" do
+
+    it "is 1 by default" do
+      expect(instance.version).to eq 1
+    end
+
+    it "can be configured during initialization" do
+      instance = described_class.new version: 2
+      expect(instance.version).to eq 2
+    end
+
+    it "requires an integer" do
+      expect{ described_class.new version: 'A' }.to raise_error ArgumentError
     end
 
   end
@@ -29,6 +61,38 @@ RSpec.describe Triple::DB do
       ['triple', 'SOME_CLASS', 'aClass', 'Triple_'].each do |name|
         instance = described_class.new namespace: name
         expect{ instance.namespace }.to raise_error StandardError
+      end
+    end
+
+  end
+
+  context "#force?" do
+
+    it "can be configured to true to overwrite the schema" do
+      instance = described_class.new force: true
+      expect(instance.force?).to eq true
+    end
+
+    it "is false by default" do
+      expect(instance.force?).to eq false
+    end
+
+    it "must explicitly be set to true" do
+      instance = described_class.new force: 'true'
+      expect(instance.force?).to eq false
+    end
+
+  end
+
+  context "#using_connection?" do
+
+    it "returns false with no connection" do
+      expect(instance).not_to be_using_connection
+    end
+
+    it "returns true when using the configured connection" do
+      instance.with_connection do
+        expect(instance).to be_using_connection
       end
     end
 
@@ -79,6 +143,38 @@ RSpec.describe Triple::DB do
       end
       expect(ActiveRecord::Base.connection_config[:database]).to eq data('with_connection.db')
     end
+
+  end
+
+  context "#setup" do
+
+    let(:instance) { described_class.new database: data('working.db') }
+
+    it "loads the schema" do
+      instance.setup
+      instance.with_connection do
+        result = ActiveRecord::Base.connection.execute \
+          "SELECT name FROM sqlite_master WHERE type='table' AND name='entities';"
+        expect(result).not_to be_empty
+      end
+    end
+
+    it "does not interfere with an existing ActiveRecord connection" do
+      ActiveRecord::Base.establish_connection \
+        adapter: 'sqlite3',
+        database: data('existing.db')
+      instance.setup
+      conn = ActiveRecord::Base.establish_connection \
+        adapter: 'sqlite3',
+        database: data('existing.db')
+      result = conn.connection.execute \
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='entities';"
+      expect(result).to be_empty
+    end
+
+    it "does not reload the schema on subsequent calls"
+
+    it "reloads the schema with configuration option force: true"
 
   end
 

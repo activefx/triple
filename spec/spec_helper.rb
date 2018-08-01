@@ -110,4 +110,4 @@ def data(file)
   File.join(__dir__, 'data', file)
 end
 
-Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f }
+Dir[__dir__ + + "/support/**/*.rb"].each {|f| require f }
