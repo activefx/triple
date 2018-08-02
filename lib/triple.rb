@@ -4,6 +4,7 @@ require 'sqlite3'
 require 'active_record'
 
 require 'triple/schema'
+require 'triple/data_model'
 require 'triple/db'
 
 module Triple
