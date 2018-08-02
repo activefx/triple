@@ -32,8 +32,12 @@ RSpec.describe Triple do
 
   context ".new" do
 
+    it "requires the :namespace argument" do
+      expect{ described_class.new }.to raise_error ArgumentError
+    end
+
     it "initializes a new triple database" do
-      expect(described_class.new).to be_a Triple::DB
+      expect(described_class.new namespace: 'MyProject').to be_a Triple::DB
     end
 
   end

@@ -25,8 +25,8 @@ module Triple
     @default_database = value
   end
 
-  def self.new(**options)
-    DB.new(options)
+  def self.new(namespace:, **options)
+    DB.new(**options.merge(namespace: namespace))
   end
 
 end

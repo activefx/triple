@@ -26,6 +26,8 @@ Before you can use Triple, you must require it in your application:
 require 'triple'
 ```
 
+To get started, choose a namespace for your data models, which will help to avoid conflicts with other models and applications:
+
 ```
-db = Triple.new('...')
+db = Triple.new(namespace: 'MyProject')
 ```
