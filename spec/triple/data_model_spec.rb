@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Triple::DataModel, :focus do
+RSpec.describe Triple::DataModel do
 
   let(:namespace) { 'Sample' }
 

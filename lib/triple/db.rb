@@ -45,7 +45,12 @@ module Triple
     def setup
       with_connection do
         load_schema
+        load_models
       end
+    end
+
+    def teardown
+      Triple::DataModel.teardown namespace: namespace
     end
 
     private
@@ -71,6 +76,11 @@ module Triple
       else
         true # no-op
       end
+    end
+
+    def load_models
+      Triple::DataModel.build \
+        namespace: namespace, connection_options: connection_options
     end
 
   end

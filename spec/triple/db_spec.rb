@@ -148,7 +148,15 @@ RSpec.describe Triple::DB do
 
   context "#setup" do
 
-    let(:instance) { described_class.new database: data('working.db') }
+    let(:namespace) { 'DatabaseTest' }
+
+    let(:instance) do
+      described_class.new namespace: namespace, database: data('working.db')
+    end
+
+    after(:each) do
+      instance.teardown
+    end
 
     it "loads the schema" do
       instance.setup
@@ -175,6 +183,17 @@ RSpec.describe Triple::DB do
     it "does not reload the schema on subsequent calls"
 
     it "reloads the schema with configuration option force: true"
+
+    it "creates the models" do
+      instance.setup
+      expect(namespace.constantize).to be_abstract_class
+      %w[ Source Entity Attribute Triple DefaultValue BooleanValue
+          StringValue IntegerValue RealValue NumericValue DateValue
+          TimeValue DatetimeValue BinaryValue ].each do |data_model|
+        expect("#{namespace}::#{data_model}".constantize.ancestors)
+          .to include(ActiveRecord::Base)
+      end
+    end
 
   end
 
