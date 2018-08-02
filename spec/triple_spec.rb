@@ -40,6 +40,26 @@ RSpec.describe Triple do
       expect(described_class.new namespace: 'MyProject').to be_a Triple::DB
     end
 
+    it "passes the :namespace option to the Triple::DB instance" do
+      instance = described_class.new namespace: 'MyProject'
+      expect(instance.namespace).to eq 'MyProject'
+    end
+
+    it "passes the :force option to the Triple::DB instance" do
+      instance = described_class.new namespace: 'MyProject', force: true
+      expect(instance).to be_force
+    end
+
+    it "passes the :database option to the Triple::DB instance" do
+      instance = described_class.new namespace: 'MyProject', database: 'my.db'
+      expect(instance.database).to eq 'my.db'
+    end
+
+    it "passes the :version option to the Triple::DB instance" do
+      instance = described_class.new namespace: 'MyProject', version: 2
+      expect(instance.version).to eq 2
+    end
+
   end
 
 end
