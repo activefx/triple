@@ -29,15 +29,15 @@ RSpec.describe 'Triple', type: :model do
     subject { klass.new }
 
     it "belongs to source" do
-      is_expected.to belong_to(:source).class_name("#{namespace}::Source").dependent(:destroy)
+      is_expected.to belong_to(:source).class_name("#{namespace}::Source")
     end
 
     it "belongs to entity" do
-      is_expected.to belong_to(:entity).class_name("#{namespace}::Entity").dependent(:destroy)
+      is_expected.to belong_to(:entity).class_name("#{namespace}::Entity")
     end
 
     it "belongs to concept" do
-      is_expected.to belong_to(:concept).class_name("#{namespace}::Concept").dependent(:destroy)
+      is_expected.to belong_to(:concept).class_name("#{namespace}::Concept")
     end
 
     it "belongs to value" do

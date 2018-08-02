@@ -13,30 +13,30 @@ module Triple
       klass.const_set(
         "Source", Class.new(namespace.constantize) do
           self.table_name = "sources"
-          has_many :triples, class_name: "#{klass}::Triple"
+          has_many :triples, class_name: "#{klass}::Triple", dependent: :destroy
         end
       )
 
       klass.const_set(
         "Entity", Class.new(namespace.constantize) do
           self.table_name = "entities"
-          has_many :triples, class_name: "#{klass}::Triple"
+          has_many :triples, class_name: "#{klass}::Triple", dependent: :destroy
         end
       )
 
       klass.const_set(
         "Concept", Class.new(namespace.constantize) do
           self.table_name = "concepts"
-          has_many :triples, class_name: "#{klass}::Triple"
+          has_many :triples, class_name: "#{klass}::Triple", dependent: :destroy
         end
       )
 
       klass.const_set(
         "Triple", Class.new(namespace.constantize) do
           self.table_name = "triples"
-          belongs_to :source, optional: true, dependent: :destroy, class_name: "#{klass}::Source"
-          belongs_to :entity, required: true, dependent: :destroy, class_name: "#{klass}::Entity"
-          belongs_to :concept, required: true, dependent: :destroy, class_name: "#{klass}::Concept"
+          belongs_to :source, optional: true, class_name: "#{klass}::Source"
+          belongs_to :entity, required: true, class_name: "#{klass}::Entity"
+          belongs_to :concept, required: true, class_name: "#{klass}::Concept"
           belongs_to :value, polymorphic: true, required: true, dependent: :destroy
         end
       )

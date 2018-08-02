@@ -29,7 +29,7 @@ RSpec.describe 'Entity', type: :model do
     subject { klass.new }
 
     it "have many triples" do
-      is_expected.to have_many(:triples)
+      is_expected.to have_many(:triples).dependent(:destroy)
     end
 
   end
