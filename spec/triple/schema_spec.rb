@@ -27,7 +27,7 @@ RSpec.describe Triple::Schema do
     it "generates the tables" do
       ar_connection = establish_connection
       described_class.call
-      tables = %w[ sources entities attributes triples default_values
+      tables = %w[ sources entities concepts triples default_values
         boolean_values string_values integer_values real_values numeric_values
         date_values time_values datetime_values binary_values ]
       tables.each do |table_name|

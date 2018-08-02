@@ -8,7 +8,7 @@ module Triple
         end
       )
 
-      klass.establish_connection(connection_options)
+      @@connection = klass.establish_connection(connection_options)
 
       klass.const_set(
         "Source", Class.new(namespace.constantize) do
@@ -25,8 +25,8 @@ module Triple
       )
 
       klass.const_set(
-        "Attribute", Class.new(namespace.constantize) do
-          self.table_name = "attributes"
+        "Concept", Class.new(namespace.constantize) do
+          self.table_name = "concepts"
           has_many :triples, class_name: "#{klass}::Triple"
         end
       )
@@ -34,10 +34,10 @@ module Triple
       klass.const_set(
         "Triple", Class.new(namespace.constantize) do
           self.table_name = "triples"
-          belongs_to :source, dependent: :destroy, class_name: "#{klass}::Source"
-          belongs_to :entity, dependent: :destroy, class_name: "#{klass}::Entity"
-          belongs_to :concept, dependent: :destroy, class_name: "#{klass}::Concept"
-          belongs_to :value, polymorphic: true
+          belongs_to :source, optional: true, dependent: :destroy, class_name: "#{klass}::Source"
+          belongs_to :entity, required: true, dependent: :destroy, class_name: "#{klass}::Entity"
+          belongs_to :concept, required: true, dependent: :destroy, class_name: "#{klass}::Concept"
+          belongs_to :value, polymorphic: true, required: true, dependent: :destroy
         end
       )
 
@@ -116,7 +116,7 @@ module Triple
     end
 
     def self.teardown(namespace:)
-      ActiveRecord::Base.remove_connection(namespace.constantize)
+      @@connection.disconnect! if @@connection
       Object.send(:remove_const, namespace)
     end
 

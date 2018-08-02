@@ -187,7 +187,7 @@ RSpec.describe Triple::DB do
     it "creates the models" do
       instance.setup
       expect(namespace.constantize).to be_abstract_class
-      %w[ Source Entity Attribute Triple DefaultValue BooleanValue
+      %w[ Source Entity Concept Triple DefaultValue BooleanValue
           StringValue IntegerValue RealValue NumericValue DateValue
           TimeValue DatetimeValue BinaryValue ].each do |data_model|
         expect("#{namespace}::#{data_model}".constantize.ancestors)

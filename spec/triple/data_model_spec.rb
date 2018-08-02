@@ -10,6 +10,10 @@ RSpec.describe Triple::DataModel do
 
   let(:instance) { described_class.new }
 
+  before(:all) do
+    ActiveRecord::Base.remove_connection
+  end
+
   context ".build" do
 
     before(:each) do
@@ -26,7 +30,7 @@ RSpec.describe Triple::DataModel do
     end
 
     it "creates the models" do
-      %w[ Source Entity Attribute Triple DefaultValue BooleanValue
+      %w[ Source Entity Concept Triple DefaultValue BooleanValue
           StringValue IntegerValue RealValue NumericValue DateValue
           TimeValue DatetimeValue BinaryValue ].each do |data_model|
         expect("#{namespace}::#{data_model}".constantize.ancestors)

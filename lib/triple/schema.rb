@@ -4,7 +4,7 @@ module Triple
     # WARNING: Destructive operation
     #
     # Calling Triple::Schema.call will overwrite existing
-    # database tables, use Triple::DB#setup instead 
+    # database tables, use Triple::DB#setup instead
     #
     def self.call(**options)
       version = options.fetch(:version) { 1 }
@@ -22,7 +22,7 @@ module Triple
           t.text :metadata
         end
 
-        create_table :attributes, force: :cascade do |t|
+        create_table :concepts, force: :cascade do |t|
           t.timestamps null: false
           t.boolean :identifier, default: false
           t.string :name
@@ -33,7 +33,7 @@ module Triple
           t.timestamps null: false
           t.integer :source_id
           t.integer :entity_id
-          t.integer :attribute_id
+          t.integer :concept_id
           t.integer :value_id
           t.string :value_type
         end
