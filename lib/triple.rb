@@ -26,6 +26,9 @@ module Triple
   end
 
   def self.new(namespace:, **options)
+    if namespace == 'Triple'
+      raise ArgumentError, 'Triple is not an allowed namespace'
+    end
     DB.new(**options.merge(namespace: namespace))
   end
 

@@ -40,6 +40,10 @@ RSpec.describe Triple do
       expect(described_class.new namespace: 'MyProject').to be_a Triple::DB
     end
 
+    it "does not allow 'Triple' as a :namespace option" do
+      expect{ described_class.new namespace: 'Triple' }.to raise_error ArgumentError
+    end
+
     it "passes the :namespace option to the Triple::DB instance" do
       instance = described_class.new namespace: 'MyProject'
       expect(instance.namespace).to eq 'MyProject'

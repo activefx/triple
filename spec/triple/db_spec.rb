@@ -180,9 +180,20 @@ RSpec.describe Triple::DB do
       expect(result).to be_empty
     end
 
-    it "does not reload the schema on subsequent calls"
+    it "does not reload the schema on subsequent calls" do
+      instance.setup
+      DatabaseTest::Source.create name: 'Test'
+      instance.setup
+      expect(DatabaseTest::Source.first.name).to eq 'Test'
+    end
 
-    it "reloads the schema with configuration option force: true"
+    it "reloads the schema with configuration option force: true" do
+      instance.setup
+      DatabaseTest::Source.create name: 'Test'
+      instance.instance_variable_set :@force, true
+      instance.setup
+      expect(DatabaseTest::Source.first).to be_nil
+    end
 
     it "creates the models" do
       instance.setup
